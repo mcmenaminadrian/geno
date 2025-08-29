@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <utility>
 #include "geno.hpp"
 
 using namespace std;
@@ -12,6 +13,26 @@ double randFactor()
 {
     return double(rand())/RAND_MAX;
 }
+
+void Geneworld::mixUpCreatures()
+{
+    random_device rd;
+    mt19937 generator(rd());
+    shuffle(organisms.begin(), organisms.end(), generator);
+}
+
+pair<vector<Creature>, vector<Creature>> Geneworld::pickLuckyGenes(const int totalPicks)
+{
+    vector<Creature> picksFirst;
+    vector<Creature> picksSecond;
+    auto firstParent = organisms.begin();
+    auto secondParent = organisms.rbegin();
+    picksFirst = vector<Creature>(firstParent, firstParent + totalPicks);
+    picksSecond = vector<Creature>(secondParent, secondParent + totalPicks);
+    return pair(picksFirst, picksSecond);
+}
+
+
 
 void Geneworld::buildworld()
 {
@@ -46,8 +67,7 @@ void Geneworld::generate()
     unsigned seed = 0;
     bool goodYear = randFactor() > badYearRate;
     unsigned int totalPicks = organisms.size()/2;
-    vector<Creature> picksFirst;
-    vector<Creature> picksSecond;
+
     vector<Creature> newCreatures;
     unsigned int tenth = totalPicks/10u;
     if (tenth == 0) {
@@ -62,27 +82,13 @@ void Geneworld::generate()
     }
     cout << "\n";
     cout << "Randomly picking elements to mate" << "\n";
-    random_device rd;
-    mt19937 generator(rd());
-    shuffle(organisms.begin(), organisms.end(), generator);
-    auto firstParent = organisms.begin();
-    auto secondParent = organisms.rbegin();
-    for (auto i = 0 ; i < totalPicks; i++)
-    {
-        picksFirst.push_back(*firstParent);
-        ++firstParent;
-        picksSecond.push_back(*secondParent);
-        ++secondParent;
-        if (i/tenth > done) {
-            done++;
-            cout << "#" << flush;
-        }
-    }
-    cout << "\n";
+    mixUpCreatures();
+    pair<vector<Creature>, vector<Creature>> selectedGenes = pickLuckyGenes(totalPicks);
+
     cout << "Matching" << "\n";
-    auto pfElement = picksFirst.begin();
-    auto psElement = picksSecond.begin();
-    for (auto j = 0; j < picksFirst.size(); j++) {
+    auto pfElement = selectedGenes.first.begin();
+    auto psElement = selectedGenes.second.begin();
+    for (auto j = 0; j < selectedGenes.first.size(); j++) {
         uint aOrB = rand()%2;
         uint bOrA = rand()%2;
         newCreatures.push_back(Creature(aOrB < 1? (*pfElement).getAState(): (*pfElement).getBState(),
@@ -179,7 +185,6 @@ void Geneworld::generate()
     cout << "------------------------------------------------------" << "\n";
     currentGeneration++;
     newCreatures.clear();
-    picksFirst.clear();
     cout << "\n" << endl;   
 }
 
