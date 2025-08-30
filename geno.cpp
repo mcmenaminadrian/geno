@@ -21,7 +21,7 @@ void Geneworld::mixUpCreatures()
     shuffle(organisms.begin(), organisms.end(), generator);
 }
 
-pair<vector<Creature>, vector<Creature>> Geneworld::dividePopulation(const int totalPicks)
+pair<vector<Creature>, vector<Creature>> Geneworld::dividePopulation(const int totalPicks) const
 {
     vector<Creature> picksFirst;
     vector<Creature> picksSecond;
@@ -32,7 +32,7 @@ pair<vector<Creature>, vector<Creature>> Geneworld::dividePopulation(const int t
     return pair(picksFirst, picksSecond);
 }
 
-vector<Creature> Geneworld::createClonables(const pair<vector<Creature>, vector<Creature>>& dividedPopulation)
+vector<Creature> Geneworld::createClonables(const pair<vector<Creature>, vector<Creature>>& dividedPopulation) const
 {
     vector<Creature> newCreatures;
     auto pfElement = dividedPopulation.first.begin();
@@ -48,7 +48,7 @@ vector<Creature> Geneworld::createClonables(const pair<vector<Creature>, vector<
     return newCreatures;
 }
 
-void Geneworld::countClones(const vector<Creature>& clonableCreatures)
+void Geneworld::countClones(const vector<Creature>& clonableCreatures) const
 {
     auto fRParents = 0u;
     auto pRParents = 0u;

@@ -23,9 +23,9 @@ class Geneworld
     std::vector<Creature> organisms;
 
     void mixUpCreatures();
-    std::pair<std::vector<Creature>, std::vector<Creature>> dividePopulation(const int totalPicks);
-    std::vector<Creature> createClonables(const std::pair<std::vector<Creature>, std::vector<Creature>>& dividedPopulation);
-    void countClones(const std::vector<Creature>& selectedToClone);
+    std::pair<std::vector<Creature>, std::vector<Creature>> dividePopulation(const int totalPicks) const;
+    std::vector<Creature> createClonables(const std::pair<std::vector<Creature>, std::vector<Creature>>& dividedPopulation) const;
+    void countClones(const std::vector<Creature>& selectedToClone) const;
 
 
     public:
