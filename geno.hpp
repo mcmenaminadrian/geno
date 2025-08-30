@@ -40,6 +40,6 @@ class Geneworld
 
     void generate();
 
-    unsigned int getCurrentGeneration() {return currentGeneration;}
+    unsigned int getCurrentGeneration() const {return currentGeneration;}
     
 };
