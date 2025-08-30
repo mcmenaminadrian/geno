@@ -11,8 +11,8 @@ class Creature {
     public:
         Creature(bool A, bool B): Astate(A), Bstate(B)
             {fullyRecessive = Astate & Bstate;};
-        bool isFullyRecessive(){return fullyRecessive;}
-        bool isPartiallyRecessive(){ return (Astate|Bstate) & !isFullyRecessive();}
-        bool getAState(){return Astate;}
-        bool getBState(){return Bstate;}
+        bool isFullyRecessive() const {return fullyRecessive;}
+        bool isPartiallyRecessive() const { return (Astate|Bstate) & !isFullyRecessive();}
+        bool getAState() const {return Astate;}
+        bool getBState() const {return Bstate;}
 };

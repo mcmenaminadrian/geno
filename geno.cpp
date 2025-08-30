@@ -21,7 +21,7 @@ void Geneworld::mixUpCreatures()
     shuffle(organisms.begin(), organisms.end(), generator);
 }
 
-pair<vector<Creature>, vector<Creature>> Geneworld::pickLuckyGenes(const int totalPicks)
+pair<vector<Creature>, vector<Creature>> Geneworld::dividePopulation(const int totalPicks)
 {
     vector<Creature> picksFirst;
     vector<Creature> picksSecond;
@@ -32,6 +32,37 @@ pair<vector<Creature>, vector<Creature>> Geneworld::pickLuckyGenes(const int tot
     return pair(picksFirst, picksSecond);
 }
 
+vector<Creature> Geneworld::createClonables(const pair<vector<Creature>, vector<Creature>>& dividedPopulation)
+{
+    vector<Creature> newCreatures;
+    auto pfElement = dividedPopulation.first.begin();
+    auto psElement = dividedPopulation.second.begin();
+    for (auto j = 0; j < dividedPopulation.first.size(); j++) {
+        uint aOrB = rand()%2;
+        uint bOrA = rand()%2;
+        newCreatures.push_back(Creature(aOrB < 1? (*pfElement).getAState(): (*pfElement).getBState(),
+            bOrA < 1 ? (*psElement).getAState() : (*psElement).getBState()));
+        pfElement++;
+        psElement++;
+    }
+    return newCreatures;
+}
+
+void Geneworld::countClones(const vector<Creature>& clonableCreatures)
+{
+    auto fRParents = 0u;
+    auto pRParents = 0u;
+    for (auto critter: clonableCreatures) {
+        if (critter.isFullyRecessive())
+        { fRParents++; }
+        else if (critter.isPartiallyRecessive())
+        { pRParents++; }
+    }
+    cout << "Total to be cloned..." << clonableCreatures.size() << "\n";
+    cout << "Of which, fully recessive... " << fRParents << "\n";
+    cout << "Partially recessive...       " << pRParents << "\n";
+    cout << "No recessive genes...        " << clonableCreatures.size() - (fRParents + pRParents) << endl;
+}
 
 
 void Geneworld::buildworld()
@@ -83,31 +114,10 @@ void Geneworld::generate()
     cout << "\n";
     cout << "Randomly picking elements to mate" << "\n";
     mixUpCreatures();
-    pair<vector<Creature>, vector<Creature>> selectedGenes = pickLuckyGenes(totalPicks);
-
+    pair<vector<Creature>, vector<Creature>> dividedPopulation = dividePopulation(totalPicks);
     cout << "Matching" << "\n";
-    auto pfElement = selectedGenes.first.begin();
-    auto psElement = selectedGenes.second.begin();
-    for (auto j = 0; j < selectedGenes.first.size(); j++) {
-        uint aOrB = rand()%2;
-        uint bOrA = rand()%2;
-        newCreatures.push_back(Creature(aOrB < 1? (*pfElement).getAState(): (*pfElement).getBState(),
-            bOrA < 1 ? (*psElement).getAState() : (*psElement).getBState()));
-        pfElement++;
-        psElement++;
-    }
-    auto fRParents = 0u;
-    auto pRParents = 0u;
-    for (auto critter: newCreatures) {
-        if (critter.isFullyRecessive())
-        {   fRParents++; }
-        else if (critter.isPartiallyRecessive())
-        { pRParents++; }
-    }
-    cout << "Total to be cloned..." << newCreatures.size() << "\n";
-    cout << "Of which, fully recessive... " << fRParents << "\n";
-    cout << "Partially recessive...       " << pRParents << "\n";
-    cout << "No recessive genes...        " << newCreatures.size() - (fRParents + pRParents) << "\n";
+    newCreatures = createClonables(dividedPopulation);
+    countClones(newCreatures);
     cout << "Breeding" << "\n";
     organisms.clear();
     if (goodYear) {
