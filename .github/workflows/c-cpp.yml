@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  define-matrix:
     runs-on:
       - ubuntu-latest
       - windows-latest
