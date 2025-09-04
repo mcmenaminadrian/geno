@@ -38,8 +38,8 @@ vector<Creature> Geneworld::createClonables(const pair<vector<Creature>, vector<
     auto pfElement = dividedPopulation.first.begin();
     auto psElement = dividedPopulation.second.begin();
     for (auto j = 0; j < dividedPopulation.first.size(); j++) {
-        uint aOrB = rand()%2;
-        uint bOrA = rand()%2;
+        unsigned int aOrB = rand()%2;
+        unsigned int bOrA = rand()%2;
         newCreatures.push_back(Creature(aOrB < 1? (*pfElement).getAState(): (*pfElement).getBState(),
             bOrA < 1 ? (*psElement).getAState() : (*psElement).getBState()));
         pfElement++;
