@@ -29,7 +29,7 @@ pair<vector<Creature>, vector<Creature>> Geneworld::dividePopulation(const int t
     auto secondParent = organisms.rbegin();
     picksFirst = vector<Creature>(firstParent, firstParent + totalPicks);
     picksSecond = vector<Creature>(secondParent, secondParent + totalPicks);
-    return pair(picksFirst, picksSecond);
+    return pair<vector<Creature>, vector<Creature>>(picksFirst, picksSecond);
 }
 
 vector<Creature> Geneworld::createClonables(const pair<vector<Creature>, vector<Creature>>& dividedPopulation) const
