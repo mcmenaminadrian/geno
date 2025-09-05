@@ -8,7 +8,7 @@ class Creature {
 
 
     public:
-        Creature(bool A, bool B): Astate(A), Bstate(B) {}
+        Creature(const bool A, const bool B): Astate(A), Bstate(B) {}
         bool isFullyRecessive() const {return Astate & Bstate;}
         bool isPartiallyRecessive() const { return (Astate|Bstate) & !isFullyRecessive();}
         bool getAState() const {return Astate;}
